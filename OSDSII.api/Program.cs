@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using OSDSII.api.Data;
+using OSDSII.api.Repositories.Interfaces;
+using OSDSII.api.Repositories;
+using OSDSII.api.Repositories.Customers;
+using OSDSII.api.Services.Customers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +14,8 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(connectionString, serverVersion);
 });
 
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 // Add services to the container.
 
 builder.Services.AddControllers();
