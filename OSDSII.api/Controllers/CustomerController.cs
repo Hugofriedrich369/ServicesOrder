@@ -12,9 +12,9 @@ namespace OSDSII.api.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly DataContext _context;
-        private readonly CustomerService _customerService;
+        private readonly ICustomerService _customerService;
 
-        public CustomerController(DataContext context, CustomerService customerService)
+        public CustomerController(DataContext context, ICustomerService customerService)
         {
             _context = context;
             _customerService = customerService;
@@ -39,14 +39,9 @@ namespace OSDSII.api.Controllers
         {
             try
             {
-                Customer customer = await _context.Customers.FirstOrDefaultAsync(customer => customer.Id == id);
-                if (customer == null)
-                {
-                    return NotFound();
-                }
+                Customer customer = await _customerService.GetCustomerByIdAsync(id);
 
                 return Ok(customer);
-
             }
             catch (Exception ex)
             {
@@ -59,15 +54,8 @@ namespace OSDSII.api.Controllers
         {
             try
             {
-                Customer Customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == novoCustomer.Email);
-                if (novoCustomer != null && Customer.Equals(novoCustomer.Email))
-                {
-                    throw new Exception("Usuário já existe");
-                }
-                await _context.Customers.AddAsync(novoCustomer);
-                await _context.SaveChangesAsync();
-
-                return Ok(novoCustomer);
+                Customer customer = await _customerService.CreateCustomerAsync(novoCustomer);
+                return Ok(customer);
             }
             catch (Exception ex)
             {
@@ -79,10 +67,8 @@ namespace OSDSII.api.Controllers
         {
             try
             {
-                _context.Customers.Update(novoCustomer);
-                int linhaAfetadas = await _context.SaveChangesAsync();
-
-                return Ok(linhaAfetadas);
+                await _customerService.UpdateCustomerAsync(novoCustomer.Id, novoCustomer);
+                return Ok();
             }
             catch (Exception ex)
             {

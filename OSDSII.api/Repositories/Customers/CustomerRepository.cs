@@ -19,6 +19,14 @@ namespace OSDSII.api.Repositories.Customers
             IEnumerable<Customer> customers = await _context.Customers.ToListAsync();
             return customers;
         }
+        public async Task<Customer> GetCustomerByIdAsync(int id)
+        {
+           return await _context.Customers.FirstOrDefaultAsync(customer => customer.Id == id);
+        }
+        public async Task CreateCustomerAsync(Customer customer)
+        {
+            await _context.AddAsync(customer);
+        }
 
     }
 }
