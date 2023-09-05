@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OSDSII.api.Data;
+using OSDSII.api.Exceptions;
 using OSDSII.api.Models;
 using OSDSII.api.Repositories.Interfaces;
 using OSDSII.api.Services.Customers;
@@ -28,9 +29,9 @@ namespace OSDSII.api.Controllers
                 IEnumerable<Customer> listacustomer = await _customerService.GetAllCustomersAsync();
                 return Ok(listacustomer);
             }
-            catch (Exception ex)
+            catch (BaseException ex)
             {
-                return BadRequest(ex.Message);
+                return ex.GetResponse();
             }
         }
 
@@ -43,9 +44,9 @@ namespace OSDSII.api.Controllers
 
                 return Ok(customer);
             }
-            catch (Exception ex)
+            catch (BaseException ex)
             {
-                return BadRequest(ex.Message);
+                return ex.GetResponse();
             }
         }
 
@@ -57,9 +58,9 @@ namespace OSDSII.api.Controllers
                 Customer customer = await _customerService.CreateCustomerAsync(novoCustomer);
                 return Ok(customer);
             }
-            catch (Exception ex)
+            catch (BaseException ex)
             {
-                return BadRequest(ex.Message);
+                return ex.GetResponse();
             }
         }
         [HttpPut("{id}")]
@@ -70,9 +71,9 @@ namespace OSDSII.api.Controllers
                 await _customerService.UpdateCustomerAsync(novoCustomer.Id, novoCustomer);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (BaseException ex)
             {
-                return BadRequest(ex.Message);
+                return ex.GetResponse();
             }
         }
         [HttpDelete]
@@ -87,9 +88,9 @@ namespace OSDSII.api.Controllers
 
                 return Ok(linhaAfetadas);
             }
-            catch (Exception ex)
+            catch (BaseException ex)
             {
-                return BadRequest(ex.Message);
+                return ex.GetResponse();
             }
         }
 

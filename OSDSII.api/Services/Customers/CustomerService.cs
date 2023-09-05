@@ -1,3 +1,4 @@
+using OSDSII.api.Exceptions;
 using OSDSII.api.Models;
 using OSDSII.api.Repositories.Interfaces;
 using OSDSII.api.Repositories.Unit_Of_Work;
@@ -46,7 +47,7 @@ namespace OSDSII.api.Services.Customers
             Customer currentCustomer = await _customersRepository.GetCustomerByIdAsync(id);
             if(currentCustomer is null)
             {
-                throw new Exception("Not found"); 
+                throw new NotFoundException("Customer"); 
             }
 
             currentCustomer.Name = customer.Name;
@@ -56,6 +57,11 @@ namespace OSDSII.api.Services.Customers
             await _unitOfWork.SaveChangesAsync();
 
             return customer;
+        }
+
+        public Task<Customer> UpdateCustomerAsync(int id, Customer customer)
+        {
+            throw new NotImplementedException();
         }
     }
 
